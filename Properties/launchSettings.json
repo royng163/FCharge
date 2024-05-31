@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FCharge (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "FCharge (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
