@@ -12,9 +12,11 @@
         <MicaBackdrop Kind="Base"/>
     </Window.SystemBackdrop>
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <ToggleSwitch x:Name="reminderToggle" Header="Rest Reminder" OffContent="Disabled" OnContent="Enabled" IsOn="False" Toggled="OnSwitchToggled"/>
-        <TimePicker x:Name="intervalPicker" ClockIdentifier="24HourClock" Header="Rest Interval" SelectedTime="00:15" MinuteIncrement="1"/>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16">
+        <TextBlock x:Name="countdownText" Text="00:00" FontSize="24"/>
+        <ToggleSwitch x:Name="reminderToggle" Header="Rest Reminder" OffContent="Disabled" OnContent="Enabled"/>
+        <NumberBox x:Name="intervalInput" Header="Rest Interval" Description="minutes" SpinButtonPlacementMode="Inline" SmallChange="1" LargeChange="15" Minimum="0"/>
+        <NumberBox x:Name="durationInput" Header="Rest Duration" Description="seconds" SpinButtonPlacementMode="Inline" SmallChange="1" LargeChange="5" Minimum="0"/>
     </StackPanel>
 
 </Window>
