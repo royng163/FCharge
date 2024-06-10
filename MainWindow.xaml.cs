@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using Windows.ApplicationModel;
 using Windows.Graphics;
 using Windows.Storage;
 
@@ -13,11 +14,14 @@ namespace FCharge
         private readonly ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private DateTime timerStartTime;
         private TimeSpan remainingTime;
+        private App app;
         public MainWindow()
         {
             // Initialize the window
             this.InitializeComponent();
             this.AppWindow.Resize(new SizeInt32(300, 500));
+
+            app = (App)Application.Current;
 
             // Initialize the reminderTimer
             reminderTimer = new DispatcherTimer();
@@ -52,18 +56,20 @@ namespace FCharge
                 localSettings.Values["Duration"] = 20;
             }
 
-            if (localSettings.Values["ReminderEnabled"] != null && (bool)localSettings.Values["ReminderEnabled"])
-            { // When the toggle value was set to true
-                reminderToggle.IsOn = true;
-                OnSwitchToggled(reminderToggle, null);
-            }
-            else
+            if (localSettings.Values["ReminderEnabled"] != null)
             {
-                reminderToggle.IsOn = false;
+                reminderToggle.IsOn = (bool)localSettings.Values["ReminderEnabled"];
+            }
+            OnReminderToggled(reminderToggle, null);
+
+            if (localSettings.Values["StartupEnabled"] != null)
+            {
+                startupToggle.IsOn = (bool)localSettings.Values["StartupEnabled"];
             }
 
             // Initialize the event handlers
-            reminderToggle.Toggled += OnSwitchToggled;
+            reminderToggle.Toggled += OnReminderToggled;
+            startupToggle.Toggled += OnStartupToggled;
             intervalInput.ValueChanged += OnIntervalInputSet;
             durationInput.ValueChanged += OnDurationInputSet;
         }
@@ -83,9 +89,10 @@ namespace FCharge
             timerStartTime = DateTime.Now - (reminderTimer.Interval - remainingTime);
         }
 
-        public void StartTimers()
+        public void StartTimers(int minutes = 0)
         {
-            reminderTimer.Interval = TimeSpan.FromMinutes(intervalInput.Value);
+            if (minutes == 0) minutes = (int)intervalInput.Value;
+            reminderTimer.Interval = TimeSpan.FromMinutes(minutes);
             reminderTimer.Start();
             countdownTimer.Start();
             timerStartTime = DateTime.Now;
@@ -96,7 +103,7 @@ namespace FCharge
         {
             reminderTimer.Stop();
             countdownTimer.Stop();
-            App.ShowWarningNotification();
+            app.ShowWarningNotification();
         }
 
         private void OnCountdownTimerElapsed(object sender, object e)
@@ -104,7 +111,7 @@ namespace FCharge
             remainingTime = reminderTimer.Interval - (DateTime.Now - timerStartTime);
             countdownText.Text = string.Format("{0:D2}:{1:D2}", remainingTime.Minutes, remainingTime.Seconds);
         }
-        private void OnSwitchToggled(object sender, RoutedEventArgs e)
+        private void OnReminderToggled(object sender, RoutedEventArgs e)
         {
             localSettings.Values["ReminderEnabled"] = reminderToggle.IsOn;
 
@@ -127,23 +134,37 @@ namespace FCharge
         }
         private void OnIntervalInputSet(object sender, NumberBoxValueChangedEventArgs e)
         {
-            reminderTimer.Stop();
-            countdownTimer.Stop();
-
-            var interval = intervalInput.Value;
-            localSettings.Values["Interval"] = interval;
-            countdownText.Text = string.Format("{0:D2}:{1:D2}", TimeSpan.FromMinutes(interval).Minutes, TimeSpan.FromMinutes(interval).Seconds);
-
-            if (reminderToggle.IsOn)
-            {
-                StartTimers();
-                OnCountdownTimerElapsed(countdownTimer, EventArgs.Empty);
-            }
+            localSettings.Values["Interval"] = intervalInput.Value;
         }
         private void OnDurationInputSet(object sender, NumberBoxValueChangedEventArgs e)
         {
-            var duration = durationInput.Value;
-            localSettings.Values["Duration"] = duration;
+            localSettings.Values["Duration"] = durationInput.Value;
+        }
+
+        private async void OnStartupToggled(object sender, RoutedEventArgs e)
+        {
+            localSettings.Values["StartupEnabled"] = startupToggle.IsOn;
+
+            if (startupToggle.IsOn)
+            {
+                // Enable the startup task
+                StartupTask startupTask = await StartupTask.GetAsync("StartOnBoot");
+
+                switch (startupTask.State)
+                {
+                    case StartupTaskState.Disabled:
+                        // Task is disabled but can be enabled.
+                        var state = await startupTask.RequestEnableAsync();
+                        break;
+                    case StartupTaskState.DisabledByUser:
+                        // Task is disabled and user must enable it manually.
+                        break;
+                    case StartupTaskState.Enabled:
+                        // Task is already enabled, no need to do anything.
+                        break;
+                }
+
+            }
         }
     }
 }

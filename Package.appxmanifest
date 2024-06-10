@@ -61,6 +61,11 @@
 					</com:ComServer>
 				</com:Extension>
 
+				<!--Startup task extension-->
+				<desktop:Extension Category="windows.startupTask">
+					<desktop:StartupTask TaskId="StartOnBoot" Enabled="false" DisplayName="FCharge" />
+				</desktop:Extension>
+				
 			</Extensions>
 		</Application>
 	</Applications>
