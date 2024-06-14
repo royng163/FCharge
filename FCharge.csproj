@@ -14,10 +14,25 @@
 		<ApplicationIcon>Assets\fcharge.ico</ApplicationIcon>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Content Remove="Assets\fcharge.altform-lightunplated_targetsize-16.png" />
+	  <Content Remove="Assets\fcharge.altform-lightunplated_targetsize-24.png" />
+	  <Content Remove="Assets\fcharge.altform-lightunplated_targetsize-256.png" />
+	  <Content Remove="Assets\fcharge.altform-lightunplated_targetsize-32.png" />
+	  <Content Remove="Assets\fcharge.altform-lightunplated_targetsize-48.png" />
+	  <Content Remove="Assets\fcharge.altform-unplated_targetsize-16.png" />
+	  <Content Remove="Assets\fcharge.altform-unplated_targetsize-24.png" />
+	  <Content Remove="Assets\fcharge.altform-unplated_targetsize-256.png" />
+	  <Content Remove="Assets\fcharge.altform-unplated_targetsize-32.png" />
+	  <Content Remove="Assets\fcharge.altform-unplated_targetsize-48.png" />
 	  <Content Remove="Assets\fcharge.ico" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Assets\Back.png" />
+	  <None Remove="Assets\SplashScreen\SplashScreen.scale-100.png" />
+	  <None Remove="Assets\SplashScreen\SplashScreen.scale-125.png" />
+	  <None Remove="Assets\SplashScreen\SplashScreen.scale-150.png" />
+	  <None Remove="Assets\SplashScreen\SplashScreen.scale-200.png" />
+	  <None Remove="Assets\SplashScreen\SplashScreen.scale-400.png" />
 	  <None Remove="overlayWindow.xaml" />
 	</ItemGroup>
 
