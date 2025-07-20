@@ -5,6 +5,8 @@ using Microsoft.Windows.AppNotifications;
 using Microsoft.Windows.AppNotifications.Builder;
 using System;
 using System.Drawing;
+using System.IO;
+using Windows.ApplicationModel;
 using Windows.Storage;
 
 namespace FCharge
@@ -16,6 +18,7 @@ namespace FCharge
         private OverlayWindow overlay;
         private DispatcherTimer responseTimer;
         private bool hasResponded = false;
+        private TrayIconWithContextMenu trayIcon;
 
         public App()
         {
@@ -42,10 +45,12 @@ namespace FCharge
 
         private void CreateTrayIcon()
         {
-            var icon = new Icon(typeof(Program).Assembly.GetManifestResourceStream("FCharge.Assets.fcharge.ico"));
-            var trayIcon = new TrayIconWithContextMenu
+            if (trayIcon != null) return;
+
+            var iconPath = Path.Combine(Package.Current.InstalledLocation.Path, "Assets/fcharge.ico");
+            trayIcon = new TrayIconWithContextMenu
             {
-                Icon = icon.Handle,
+                Icon = new Icon(iconPath).Handle,
                 ToolTip = "FCharge",
             };
             trayIcon.ContextMenu = new PopupMenu()
@@ -62,10 +67,8 @@ namespace FCharge
                     new PopupMenuItem("Exit", (_, _)=>
                     {
                         trayIcon.Dispose();
-                        mainWindow.DispatcherQueue.TryEnqueue(() =>
-                        {
-                            mainWindow.Close();
-                        });
+                        mainWindow.Close();
+                        this.Exit();
                     })
                 }
             };

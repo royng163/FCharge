@@ -33,22 +33,20 @@ namespace FCharge
             countdownTimer.Interval = TimeSpan.FromSeconds(1);
 
             // Retrieve the reminder settings and Initialize the countdownText
-            var interval = (double)localSettings.Values["Interval"];
-            if (!double.IsNaN(interval))
+            if (localSettings.Values["Interval"] != null)
             {
-                intervalInput.Value = interval;
+                intervalInput.Value = (double)localSettings.Values["Interval"];
             }
             else
             {
-                intervalInput.Value = 1;
-                localSettings.Values["Interval"] = 1;
+                intervalInput.Value = 20;
             }
             remainingTime = TimeSpan.FromMinutes(intervalInput.Value);
             countdownText.Text = string.Format("{0:D2}:{1:D2}", remainingTime.Minutes, remainingTime.Seconds);
 
             if (localSettings.Values["Duration"] != null)
             {
-                durationInput.Value = (double)localSettings.Values["Duration"];
+                durationInput.Value = (Int32)localSettings.Values["Duration"];
             }
             else
             {

@@ -60,6 +60,12 @@
 		<None Remove="Assets\fcharge.ico" />
 		<EmbeddedResource Include="Assets\fcharge.ico" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Assets\fcharge.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 	
 	<!--
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
