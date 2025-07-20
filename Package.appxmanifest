@@ -11,14 +11,14 @@
 
 	<Identity
 	  Name="6f23ce97-9fb7-43c4-88e0-8bbd885c4164"
-	  Publisher="CN=Roy"
+	  Publisher="CN=Roy Ng"
 	  Version="1.0.0.0" />
 
 	<mp:PhoneIdentity PhoneProductId="6f23ce97-9fb7-43c4-88e0-8bbd885c4164" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
 	<Properties>
 		<DisplayName>FCharge</DisplayName>
-		<PublisherDisplayName>Roy</PublisherDisplayName>
+		<PublisherDisplayName>Roy Ng</PublisherDisplayName>
 		<Logo>Assets\StoreLogo.png</Logo>
 	</Properties>
 
